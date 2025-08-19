@@ -41,16 +41,64 @@ route.get("/all", async (req, res) => {
         console.log(result);
       }
       res.status(200).json({
-        msg: result
+        msg: result,
       });
     });
   } catch (err) {
     console.log("ERRor");
     res.status(500).json({
-        error:err
-    })
-    
+      error: err,
+    });
   }
 });
+
+route.get("/student/:id", async (req, res) => {
+  try {
+    const query = "SELECT * FROM student WHERE id = ?";
+    db.query(query, req.params.id, (err, result) => {
+      if (err) {
+        console.log("Error");
+      }
+      if (result.length === 0) {
+        return res.status(404).json({
+          msg: "Student not found",
+        });
+      } else {
+        console.log(result[0]);
+      }
+
+      res.status(200).json({
+        msg: result[0],
+      });
+    });
+  } catch (err) {
+    console.log("error");
+    res.status(500).json({
+      error: err,
+    });
+  }
+});
+
+// delete
+
+route.delete("/student/:id", (req, res) => {
+  const query = "DELETE FROM student WHERE id = ? ";
+  db.query(query, req.params.id, (err, result) => {
+    if (err) {
+      console.log("error");
+      return res.status(500).json({
+        msg: "error",
+      });
+    } else {
+      console.log(result.affectedRows);
+      return res.status(200).json({
+        msg: "delete data",
+        data:result.affectedRows
+      });
+    }
+  });
+});
+// update 
+
 
 module.exports = route;
