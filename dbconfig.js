@@ -1,11 +1,11 @@
-
 const mysql = require("mysql2");
 
+require("dotenv").config()
 const dbConnect = mysql.createConnection({
-  host: "localhost",
-  user: "root",
+  host: process.env.HOST,
+  user: process.env.USER,
   password: "",
-  database: "demo",
+  database: process.env.DB_NAME,
 });
 dbConnect.connect((err) => {
   if (err) {
@@ -13,3 +13,5 @@ dbConnect.connect((err) => {
   }
   console.log("Db connected");
 });
+
+module.exports = dbConnect;
