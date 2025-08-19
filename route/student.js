@@ -93,12 +93,28 @@ route.delete("/student/:id", (req, res) => {
       console.log(result.affectedRows);
       return res.status(200).json({
         msg: "delete data",
-        data:result.affectedRows
+        data: result.affectedRows,
       });
     }
   });
 });
-// update 
+// update
 
+route.put("/student/:id", (req, res) => {
+  const name = req.body.name;
+  const age = req.body.age;
+  const faculty = req.body.faculty;
+  const query = `UPDATE student SET name ="${name}" ,age="${age}",faculty="${faculty}" WHERE id=?`;
 
+  db.query(query, req.params.id, (err, result) => {
+     if (err) {
+    return res.status(500).json({ msg: "Update failed", error: err });
+  }
+  
+  res.status(200).json({
+    msg: "Student updated successfully",
+    affectedRows: result.affectedRows
+  });
+  });
+});
 module.exports = route;
